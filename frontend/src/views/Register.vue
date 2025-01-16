@@ -1,44 +1,46 @@
 <template>
-    <div>
-      <h1>Créer un compte</h1>
-      <form @submit.prevent="handleRegister">
-        <input type="text" v-model="username" placeholder="Nom d'utilisateur" />
-        <br />
-        <input type="email" v-model="email" placeholder="Email" />
-        <br />
-        <input type="password" v-model="password" placeholder="Mot de passe" />
-        <br />
-        <button type="submit">S'inscrire</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    name: 'Register',
-    data() {
-      return {
-        username: '',
-        email: '',
-        password: '',
-      };
+  <div>
+    <h1>Inscription</h1>
+    <form @submit.prevent="handleRegister">
+      <input type="text" v-model="username" placeholder="Nom d'utilisateur" required />
+      <input type="email" v-model="email" placeholder="Email" required />
+      <input type="password" v-model="password" placeholder="Mot de passe" required />
+      <button type="submit">Créer un compte</button>
+    </form>
+    <router-link to="/">Retour à l'accueil</router-link>
+    <router-link to="/login">Retour à la connexion</router-link>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import apiClient from '../services/api';
+
+export default defineComponent({
+  name: 'Register',
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    async handleRegister() {
+      try {
+        const response = await apiClient.post('/api/user/register', {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        });
+
+        alert('Inscription réussie  ');
+        this.$router.push('/login'); 
+      } catch (error) {
+        console.error('Erreur lors de l\'inscription :', error);
+        alert('Erreur lors de l\'inscription. Veuillez réessayer.');
+      }
     },
-    methods: {
-      async handleRegister() {
-        try {
-          const response = await axios.post('http://localhost:3000/users', {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-          });
-          alert('Compte créé : ' + response.data.message);
-        } catch (error) {
-          alert('Erreur : ' + error.response.data.message);
-        }
-      },
-    },
-  };
-  </script>
-  
+  },
+});
+</script>
