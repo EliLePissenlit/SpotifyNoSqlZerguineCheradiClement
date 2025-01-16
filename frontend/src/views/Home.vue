@@ -1,19 +1,18 @@
 <template>
-  <div>
+  <div class="min-h-screen bg-gradient-to-r from-green-400 to-[#120726] text-white">
     <Header />
-
-    <main style="text-align: center; margin-top: 20px;">
-      <h1 v-if="isLoggedIn">
+    <main class="text-center mt-5">
+      <h1 v-if="isLoggedIn" class="text-3xl font-extrabold">
         Bonjour, {{ username }} !
       </h1>
-      <h1 v-else>
+      <h1 v-else class="text-3xl font-extrabold">
         Bienvenue sur Spotifly
       </h1>
     </main>
-
     <Player :currentSong="currentSong" />
   </div>
 </template>
+
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue';

@@ -8,7 +8,6 @@
       placeholder="Rechercher une musique, un artiste ou une playlist..."
       style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
     />
-    <!-- Liste des résultats -->
     <ul v-if="results.length" style="list-style: none; padding: 0; margin-top: 10px;">
       <li
         v-for="result in results"
@@ -17,7 +16,7 @@
         style="cursor: pointer; padding: 5px 0; border-bottom: 1px solid #ccc;"
       >
         <template v-if="result.type === 'Chanson'">
-          🎵 {{ result.title }} - {{ result.artist }}
+          🎵 {{ result.title }}
         </template>
         <template v-if="result.type === 'Playlist'">
           📋 Playlist: {{ result.name }}
@@ -31,7 +30,6 @@
 import { defineComponent, ref } from 'vue';
 import apiClient from '../services/api';
 
-// Définition du type pour les résultats
 type SearchResult =
   | { id: string; title: string; artist: string; type: 'Chanson' }
   | { id: string; name: string; songs: { title: string; artist: { name: string } }[]; type: 'Playlist' };
@@ -56,7 +54,6 @@ export default defineComponent({
           ...response.data.songs.map((song: any) => ({
             id: song._id,
             title: song.title,
-            artist: song.artist?.name || 'Inconnu',
             type: 'Chanson',
           })),
           ...response.data.playlists.map((playlist: any) => ({
@@ -71,7 +68,6 @@ export default defineComponent({
       }
     };
 
-    // Gestion du clic sur un résultat
     const handleResultClick = (result: SearchResult) => {
       if (result.type === 'Chanson') {
         emit('play-song', { title: result.title, artist: result.artist });
